@@ -1,5 +1,7 @@
 # Biopotential Analysis Suite
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 An open-source, modular desktop application for processing, visualising and
 analysing biomedical signals. The suite is built around a plugin-style
 architecture, so new processing modules can be added without touching the
@@ -20,6 +22,7 @@ no dependency on commercial software.
 - [Installation](#installation)
 - [Quick start](#quick-start)
 - [Input data](#input-data)
+- [Output files](#output-files)
 - [Citation](#citation)
 - [License](#license)
 - [Contact](#contact)
@@ -31,8 +34,11 @@ no dependency on commercial software.
 ### Signal filtering
 
 Load a signal in `.txt`, `.csv` or `.mat` format, select a channel, and apply
-low-pass, high-pass or band-pass Butterworth filters. The original and filtered
-signals are displayed side by side, and the result can be exported to CSV.
+low-pass, high-pass, band-pass or band-stop filters. Four filter designs are
+available (Butterworth, Chebyshev, Elliptic, Bessel), with adjustable order
+and cut-off frequencies. The original and filtered signals are shown side by
+side, and the result can be exported to CSV. A batch mode applies the same
+filter to many files at once.
 
 ### Cardiorespiratory coordination (CRC)
 
@@ -49,8 +55,30 @@ respiratory rhythms:
 - Recurrence-point coordination percentage at two tolerances (ε = 0.11 s and
   0.21 s).
 - Automatic EDR quality assessment combining deterministic rules, a Random
-  Forest classifier and an Isolation Forest outlier detector.
+  Forest classifier and an Isolation Forest outlier detector, with a colour
+  code (green / yellow / red) indicating the reliability of each recording.
 - Batch processing with per-recording HTML reports and a summary CSV.
+
+### EDR (standalone)
+
+Reconstructs the EDR from an ECG recording without requiring a respiratory
+reference. Useful for building EDR-only pipelines or for testing the
+reconstruction on new data. Runs in single-file or batch mode, with the same
+quality assessment used by the CRC module.
+
+### FFT extraction
+
+Computes the power spectral density of any channel using Welch's method, marks
+the dominant peak, and reports its frequency and power. Runs on any signal
+loaded through the standard interface.
+
+### Signal viewer
+
+Loads a recording and displays all channels as stacked, time-linked subplots.
+Channels can be selected or deselected individually, a time window can be
+applied, and per-channel statistics (mean, standard deviation, minimum,
+maximum, number of finite samples) are shown in a table. The visible range and
+the statistics table can be exported to CSV.
 
 ---
 
@@ -78,54 +106,17 @@ in the main window is designed to grow as modules are added.
 
 ## Installation
 
-### Requirements
+### Option 1 — Standalone executable (no Python required)
 
-- Python 3.10 or higher
-- Operating system: Windows, Linux or macOS
+Download the latest executable from the
+[Releases](../../releases) page, unzip it, and double-click
+`Biopotentials Analysis App.exe`. No installation, no dependencies, no
+internet connection required.
 
-## Quick start
+**Minimum requirements:**
 
-    1. Launch the application with python (biopotentials analysis.py).
-    2. The main window shows a lateral menu with the available modules. Modules that are not yet implemented appear greyed out.
-    3. Select a module to open its workspace. Each module has its own controls,plots and export options.
-    4. For the CRC module:
-        - Load the signals files (.txt, .csv, .mat).
-        - Choose an output folder to save the results.
-        - Choose the ECG and respiration channels.
-        - Set the sampling rate and the analysis duration.
-        - Set the number of cycles for coordigram and the source of this (respiration, edr or both).
-        - Choose if you want to calculate EDR and if respiration is available.
-        - Click Process to run the pipeline.
-        - Switch to the Coordigram tab to see the results for all six landmark definitions.
-    5. For the Filters module:
-        - Load the bipotential signal.
-        - Choose the channel of biopotential.
-        - Set the sampling rate.
-        - Choose the filter type and set the frequencies to work.
-        - Click Process to run the pipeline.
-    6. For the FFT Extraction Module:
-        - Load the bipotential signal.
-        - Choose the channel of biopotential.
-        - Set the sampling rate.
-        - Click Process to run the pipeline.
-
-## Input data
-
-    The suite accepts signals in three formats:
-
-    1. .txt and .csv: one column per channel, one row per sample. The delimiter is detected automatically.
-    2. .mat: MATLAB files with one or more numeric arrays of equal length.
-
-    Channels are selected from a drop-down menu after the file is loaded. The same loading interface is shared by all modules, so new modules inherit the same format support.
-
-## License
-This project is distributed under the MIT License. See the LICENSE file for
-details.
-
-## Contact
-For questions, bug reports or feature requests, please open an issue on the GitHub repository or contact:
-
-Leonardo Ivan Vega Reyes - lvegar1700@alumno.ipn.mx
-
-Jose Javier Reyes Lagos - javier.reyes@cinvestav.mx
-
+- Windows 10 or later (64-bit)
+- 4 GB RAM (8 GB recommended for batch processing)
+- 2 GB free disk space
+- 1280 × 800 display
+- Microsoft Visual C++ Redistributable 2015–2022 (usually already installed)
